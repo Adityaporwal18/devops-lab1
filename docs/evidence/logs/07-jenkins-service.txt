@@ -1,0 +1,17 @@
+aditya@lima-devops:~$ sudo systemctl enable --now jenkins
+Synchronizing state of jenkins.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable jenkins
+aditya@lima-devops:~$ systemctl status jenkins --no-pager --lines=0
+● jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-11-25 13:11:54 IST; 13s ago
+   Main PID: 10299 (java)
+      Tasks: 53 (limit: 4598)
+     Memory: 705.6M (peak: 709.0M)
+        CPU: 15.270s
+     CGroup: /system.slice/jenkins.service
+             └─10299 /usr/bin/java -Djava.awt.headless=true -jar /usr/share/java/jenkins.war --webroot=/var/cache/jenkins/war …
+aditya@lima-devops:~$ systemctl is-enabled jenkins && systemctl is-active jenkins
+enabled
+active
+aditya@lima-devops:~$ 

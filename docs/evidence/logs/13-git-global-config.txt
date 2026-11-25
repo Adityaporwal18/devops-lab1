@@ -1,0 +1,8 @@
+aditya@lima-devops:~$ git config --global user.name "Adityaporwal18"
+aditya@lima-devops:~$ git config --global user.email "adityaporwal501@gmail.com"
+aditya@lima-devops:~$ git config --global init.defaultBranch main
+aditya@lima-devops:~$ git config --global --list
+user.name=Adityaporwal18
+user.email=adityaporwal501@gmail.com
+init.defaultbranch=main
+aditya@lima-devops:~$ 

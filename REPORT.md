@@ -3,275 +3,200 @@
 **Course:** DevOps and Automation Lab (ENSP461)  
 **Student:** Aditya Porwal  
 **Repository:** https://github.com/Adityaporwal18/devops-lab1  
-**Environment used:** Ubuntu in WSL2 on Windows  
+**Environment:** Ubuntu 24.04.5 LTS virtual machine (Lima 2.3.0) on a MacBook Pro (Apple M1, macOS 26.4)  
+**Date of this run:** 25 November 2026  
 **Application language:** Python | **Pipeline syntax:** Declarative Jenkins Pipeline
 
-[Repository overview](README.md) | [Evidence gallery](docs/EVIDENCE.md) | [Completion checklist](docs/CHECKLIST.md)
+[Repository overview](README.md) | [Evidence gallery](docs/EVIDENCE.md) | [Commands executed](commands.txt)
 
 ## 1. Aim
 
-To establish a foundational DevOps workflow for a sample application using Git-based source control, GitHub, Jenkins continuous integration, automated tests and a local build-and-deploy demonstration. The work maintains source code and pipeline configuration in version control and records practical evidence for each experiment.
+To build a foundational DevOps workflow for a sample application: Git-based version control, a GitHub repository, a Jenkins CI/CD pipeline with build, test and deploy stages, and an automated trigger that starts the pipeline when new code is pushed.
 
-## 2. Scope and evidence basis
+## 2. Environment and tools
 
-The report follows the seven tasks in the [Lab 1 assignment](docs/requirements/lab1-tasks.png). The [general instructions](docs/requirements/general-instructions.png) identify the GitHub repository as the primary evidence of practical work and require commands, configuration, screenshots, logs and observations.
+The lab was run in an Ubuntu virtual machine. All versions below are the ones observed during this run.
 
-The observed outcomes below come from the student's original screenshots and repository contents. Instructions for reproducing the work are distinguished from captured results. In particular, the implementation uses a local command-line deployment demonstration; it does not claim a production or remotely hosted deployment.
-
-## 3. Tools and observed versions
-
-| Component | Observed value / role | Evidence |
+| Component | Observed value | Evidence |
 |---|---|---|
-| Ubuntu | 26.04.1 LTS, codename resolute | [SS01](docs/evidence/screenshots/ss01-ubuntu-version.png) |
-| Git | 2.53.0 | [SS02](docs/evidence/screenshots/ss02-git-version.png) |
-| OpenJDK | 21.0.12.1 | [SS03](docs/evidence/screenshots/ss03-java-version.png) |
-| systemd | running | [SS04](docs/evidence/screenshots/ss04-systemd-running.png) |
-| Jenkins | 2.580.1 | [SS05](docs/evidence/screenshots/ss05-jenkins-version.png) |
-| Jenkins service | Enabled and active (running) when captured | [SS06](docs/evidence/screenshots/ss06-jenkins-service.png) |
-| Python | 3.14.4 in the captured test session | [SS13](docs/evidence/screenshots/ss13-local-tests.png), [SS22](docs/evidence/screenshots/ss22-jenkins-console.png) |
-| pytest | 9.1.1 in the captured test session | [SS22](docs/evidence/screenshots/ss22-jenkins-console.png) |
-| GitHub | Repository owner Adityaporwal18, primary branch main | [SS20](docs/evidence/screenshots/ss20-github-source.png) |
-
-These are the versions visible in this experiment, not minimum-version requirements or a claim about the latest releases. Docker was available on the host but was not used for this Lab 1 pipeline.
+| Operating system | Ubuntu 24.04.5 LTS (noble), kernel 6.8.0-147-generic, aarch64 | [E01](docs/evidence/screenshots/01-ubuntu-version.png) |
+| Git | 2.43.0 | [E02](docs/evidence/screenshots/02-git-install-and-version.png) |
+| Java | OpenJDK 21.0.13.1 | [E03](docs/evidence/screenshots/03-java-install-and-version.png) |
+| Init system | systemd, state `running` | [E04](docs/evidence/screenshots/04-systemd-running.png) |
+| Jenkins | 2.580.2 (LTS), systemd service enabled and active | [E06](docs/evidence/screenshots/06-jenkins-install-and-version.png), [E07](docs/evidence/screenshots/07-jenkins-service.png) |
+| Python / pytest | Python 3.12.3, pytest 9.2.0 | [E17](docs/evidence/screenshots/17-local-tests-pass.png) |
+| GitHub CLI | gh 2.45.0 | [E21](docs/evidence/screenshots/21-install-github-cli.png) |
+| GitHub | Public repository `Adityaporwal18/devops-lab1`, branch `main` | [E24](docs/evidence/screenshots/24-github-repository.png) |
 
 ## Q1 - Install and configure Git and Jenkins
 
-### Objective
-
-Install and configure Git and Jenkins, verify the environment and configure the Git user name and email. The task specifically requests Git on Ubuntu Linux.
-
-### Procedure
-
-Ubuntu was opened through WSL2. The Linux version and systemd state were checked before Jenkins setup. Git and a Java 21 runtime were installed, the Jenkins LTS package repository was configured, and Jenkins was started as a systemd service. The browser setup wizard was completed, including plugin installation and creation of an administrator account.
-
-Global Git identity was configured for commits. The captured configuration shows `user.name=Adityaporwal18` and a configured `user.email`. The earlier command reference used the display-name example Aditya Porwal; this report records the actual captured value instead of implying that the example was the observed configuration.
-
-### Verification commands
+**Procedure.** Packages were installed with `apt`. Jenkins was installed from the official `debian-stable` apt repository after adding its signing key, and runs as a systemd service. The Jenkins setup wizard was completed in the browser: unlock with the initial admin password, install the suggested plugins, create the first admin user. Finally the global Git identity was configured.
 
 ```bash
-lsb_release -a
-git --version
-java -version
-systemctl is-system-running
-jenkins --version
-systemctl status jenkins --no-pager
-git config --global --get user.name
-git config --global --get user.email
+sudo apt update
+sudo apt install git -y
+sudo apt install fontconfig openjdk-21-jre python3-venv -y
+sudo wget -q -O /etc/apt/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl enable --now jenkins
+git config --global user.name "Adityaporwal18"
+git config --global user.email "adityaporwal501@gmail.com"
+git config --global init.defaultBranch main
 ```
 
-Administrator passwords and GitHub access tokens are not part of the required report evidence. They must not be committed with the project.
+**Result.** Git 2.43.0, OpenJDK 21 and Jenkins 2.580.2 are installed. The Jenkins service is enabled and active, the wizard installed 92 plugins, and the dashboard is available at `http://localhost:8080` for the user **Aditya Porwal**. `git config --global --list` shows the configured name and email.
 
-### Result and observations
+![Global Git configuration](docs/evidence/screenshots/13-git-global-config.png)
 
-The screenshots confirm the Ubuntu environment, installed tools, running Jenkins service, setup page and configured dashboard. Git identity is visible in the evidence. The practical uses Ubuntu within Windows rather than a native Windows Jenkins installation.
-
-**Evidence:** [SS01-SS09](docs/EVIDENCE.md#q1-installation-and-configuration).  
-**Reproduction detail:** [Environment setup](docs/SETUP.md).
+Evidence: [E01-E13](docs/EVIDENCE.md#q1---install-and-configure-git-and-jenkins)
 
 ## Q2 - Set up version control using Git
 
-### Objective
+**Application.** `app.py` is a small command-line calculator with `add()` and `subtract()`. `test_app.py` contains four pytest unit tests.
 
-Initialize a repository, stage and commit changes, create and merge branches, and push the repository to GitHub.
+**Procedure.** The GitHub repository already existed (commit `d356070`, 13 November 2026). For this run a new local repository was initialised in the VM with `git init`, connected to GitHub with `git remote add` and synchronised with `git pull origin main`. The earlier evidence files were removed in the first commit, and the work was then done on branches:
 
-### Application and tests
+1. `feature-subtract` - adds `subtract()` and two tests; tests run locally (4 passed); committed and merged into `main` with `--no-ff`.
+2. `docs-update` - rewrites the README; committed and merged into `main` with `--no-ff`.
+3. Authentication with `gh auth login`, then `git push -u origin main`.
 
-The sample application exposes an `add(a, b)` function and prints a small demonstration when run as a script. Keeping the application small makes the Git and CI/CD operations easy to inspect.
+**Commit history of this run** (before the documentation commits):
 
-| Test | Input | Assertion |
+| Commit | Branch | Message |
 |---|---|---|
-| test_add | 2, 3 | Result equals 5 |
-| test_add_negative_numbers | -2, -3 | Result equals -5 |
+| `f36c9b6` | main | Remove outdated evidence and docs before re-running Lab 1 |
+| `2c565c3` | feature-subtract | Add subtract function with unit tests |
+| `3a02dfc` | main | Merge branch 'feature-subtract' |
+| `2de7442` | docs-update | Document pipeline stages and local usage in README |
+| `0c6ed7c` | main | Merge branch 'docs-update' |
+| `801426b` | main | Add Jenkins pipeline job configuration |
 
-The application has no web interface or long-running server. The two tests cover two simple numerical cases, not comprehensive input validation or broad application coverage.
+![Branches, merges and history](docs/evidence/screenshots/20-docs-branch-merge-and-history.png)
 
-### Procedure
+**Result.** Initialising, staging, committing, branching, merging and pushing were all carried out. The push updated GitHub from `d356070` to `0c6ed7c`, and GitHub shows the commits under the account `Adityaporwal18`.
 
-The repository was created in `/home/user/devops-lab1`, initialized with Git and placed on `main`. `app.py` and `README.md` were staged and committed. The `feature-tests` branch was created to add `test_app.py`, `requirements.txt` and `.gitignore`. Tests were executed in a Python virtual environment. The branch was then merged into `main`.
-
-A second branch, `docs-update`, was used to document the planned pipeline stages. The decorated local Git history shows both branch names. A GitHub repository was created, the HTTPS origin was configured, and `main` was pushed after GitHub CLI authentication.
-
-### Recorded development history
-
-| Short commit | Recorded change |
-|---|---|
-| 2719c1e | Initial Python application setup |
-| 1235e08 | Add unit tests with pytest |
-| 548ad41 | Document CI/CD pipeline stages |
-| 8b7f655 | Add Jenkins CI/CD pipeline |
-| c02a681 | Test automated Jenkins trigger |
-| a5b3788 | Add Lab 1 command documentation |
-| 5071511 | Add Lab 1 CI/CD workflow report |
-
-This is the history before the expanded documentation pack is committed. The current repository will acquire additional documentation/evidence commits after this report is uploaded.
-
-### Result and observations
-
-Initialization, the first commit, branch creation, the feature-branch fast-forward merge, decorated history, successful GitHub push and uploaded source files are all visible. A fast-forward merge produces a linear history; a separate merge commit is not required for it to be a valid merge.
-
-At the review baseline, GitHub listed only `main`. The two feature branches were demonstrated locally; the report does not claim they were already pushed to GitHub. Publishing those existing branches is an optional evidence improvement, not a reason to recreate or rewrite the history.
-
-**Evidence:** [SS10-SS20](docs/EVIDENCE.md#q2-version-control).  
-**Commands and commit links:** [Git workflow](docs/GIT_WORKFLOW.md).
+Evidence: [E14-E26](docs/EVIDENCE.md#q2---version-control-with-git-and-github)
 
 ## Q3 - Implement a basic Jenkins CI/CD pipeline
 
-### Objective
+**Configuration.** A Pipeline job named `devops-lab1` reads its pipeline from the GitHub repository. The job definition is stored in the repository as [jenkins/job-config.xml](jenkins/job-config.xml) and was created through the Jenkins REST API.
 
-Configure Jenkins to obtain source from the GitHub repository and run an automated build.
+| Setting | Value |
+|---|---|
+| Job type | Pipeline |
+| Definition | Pipeline script from SCM |
+| SCM | Git |
+| Repository URL | `https://github.com/Adityaporwal18/devops-lab1.git` |
+| Branch | `*/main` |
+| Script path | `Jenkinsfile` |
 
-### Configuration
+**Result.** Build #1 was started manually by the user Aditya Porwal. Jenkins obtained the Jenkinsfile from GitHub, cloned the repository, checked out revision `0c6ed7c` and finished with **SUCCESS** in 14.7 seconds.
 
-The intended job is named `devops-lab1` and uses **Pipeline script from SCM**. Its SCM is Git, the repository is `https://github.com/Adityaporwal18/devops-lab1.git`, the branch specification is `*/main`, and the script path is `Jenkinsfile`. The repository is public, so its read-only checkout does not require the student's personal GitHub CLI login to be copied to the Jenkins service account.
+![Build #1 console start](docs/evidence/screenshots/28-jenkins-build-1-console-start.png)
 
-The local setup and the Jenkins workspace are separate directories:
-
-```text
-Developer checkout: /home/user/devops-lab1
-Jenkins workspace:  /var/lib/jenkins/workspace/devops-lab1
-```
-
-The latter path is visible in the captured Jenkins test console. The job settings are documented for reproduction, but a settings screenshot has not yet been included in the supplied evidence.
-
-### Result and evidence limitation
-
-Jenkins build #1 completed successfully, as shown by the console and build-history evidence. The visible console section confirms the tests and local deployment ran inside the Jenkins workspace. Its top section, which would explicitly show the GitHub checkout and commit, is outside the captured viewport.
-
-For a complete repository-only audit trail, attach the top of that console or the full console export as described in the checklist. This report does not substitute an inferred checkout log for actual output.
-
-**Evidence:** [Pipeline file on GitHub](docs/evidence/screenshots/ss21-github-jenkinsfile.png), [full available console screenshot](docs/evidence/screenshots/ss22-jenkins-console.png).  
-**Reproduction detail:** [Jenkins job setup](docs/JENKINS.md).
+Evidence: [E27-E31](docs/EVIDENCE.md#q3-q5---jenkins-pipeline-stages-and-automated-trigger)
 
 ## Q4 - Create a Jenkinsfile defining pipeline stages
 
-### Objective
+The [Jenkinsfile](Jenkinsfile) uses declarative syntax with three stages.
 
-Define Build, Test and Deploy stages in a declarative or scripted Jenkins pipeline and demonstrate execution.
-
-### Implementation
-
-The repository's [Jenkinsfile](Jenkinsfile) uses a declarative `pipeline` block, `agent any`, three ordered stages and success/failure post conditions.
-
-| Stage | Commands in the implementation | Purpose |
+| Stage | Commands | Result in build #1 |
 |---|---|---|
-| Build | Create `venv`, activate it, install requirements, run `python3 -m compileall app.py` | Prepare dependencies and byte-compile the Python source |
-| Test | Activate `venv`; execute `pytest -v` | Run both unit tests |
-| Deploy | Create `deploy`; copy `app.py`; run `python3 deploy/app.py` | Demonstrate local staging and execute the copied application |
-| Post conditions | Echo success or failure text | Record the pipeline outcome |
+| Build | `python3 -m venv venv`, `pip install -r requirements.txt`, `python3 -m compileall app.py` | Dependencies installed (pytest 9.2.0), `app.py` compiled |
+| Test | `pytest -v` | 4 passed |
+| Deploy | `mkdir -p deploy`, `cp app.py deploy/app.py`, `python3 deploy/app.py` | Application copied and executed |
 
-The Build stage does not produce a wheel, container image or standalone executable. The virtual environment is prepared in the Jenkins workspace, not reused from the student's home directory. Tests and deployment are separate pipeline stages even though the application is intentionally small.
-
-### Observed output
-
-The original Jenkins console includes:
+Console output of the Deploy stage and the end of build #1 (from the [full log](docs/evidence/logs/jenkins-build-1-console.txt)):
 
 ```text
-test_app.py::test_add PASSED
-test_app.py::test_add_negative_numbers PASSED
-2 passed in 0.00s
-[Pipeline] { (Deploy)
 + mkdir -p deploy
 + cp app.py deploy/app.py
 + python3 deploy/app.py
 DevOps Lab 1 Application
 2 + 3 = 5
+5 - 3 = 2
+...
 CI/CD Pipeline completed successfully!
+...
 Finished: SUCCESS
 ```
 
-This is a selected transcription, not the complete raw log. The original screenshot remains the primary evidence.
-
-![Readable crop of the original Jenkins result](docs/evidence/screenshots/ss22a-console-detail.png)
-
-**Result:** the captured Jenkins run passed its two tests, executed the local Deploy stage and finished successfully. Only the success path is observed; the configured failure post condition has not been demonstrated with an intentionally failing build.
+![Pipeline stages of build #1](docs/evidence/screenshots/31-jenkins-build-1-pipeline-stages.png)
 
 ## Q5 - Automate application deployment
 
-### Objective
+**Build trigger.** The Jenkinsfile declares `pollSCM('H/2 * * * *')`. After the first build Jenkins registered the trigger and now polls GitHub about every two minutes.
 
-Use Jenkins build triggers, post-build actions and deployment steps to automate the application workflow.
+**Demonstration.** A new commit was pushed and no build was started manually:
 
-### Trigger configuration
+| Time (IST) | Event | Evidence |
+|---|---|---|
+| 13:23:21 | Commit `801426b` pushed to GitHub | [E32](docs/evidence/screenshots/32-push-change-for-scm-trigger.png) |
+| 13:24:00 | Polling compares `0c6ed7c` with remote head `801426b`: **Changes found** | [E35](docs/evidence/screenshots/35-jenkins-scm-polling-log.png) |
+| 13:24:08 | Build #2 begins: **Started by an SCM change** | [E33](docs/evidence/screenshots/33-jenkins-build-2-started-by-scm-change.png) |
+| 13:24:14 | Build #2 ends: 4 passed, application deployed, **SUCCESS** (5.8 s) | [E34](docs/evidence/screenshots/34-jenkins-build-2-console-end.png) |
 
-The Jenkinsfile contains:
+![Build #2 started by an SCM change](docs/evidence/screenshots/33-jenkins-build-2-started-by-scm-change.png)
 
-```groovy
-triggers {
-    pollSCM('H/2 * * * *')
-}
-```
+**Post-build actions.** The `post` block prints `CI/CD Pipeline completed successfully!` on success and `Pipeline failed.` on failure. Both builds show the success message.
 
-This tells Jenkins to poll for source changes on a roughly two-minute schedule. It is change-based polling, not an unconditional build every two minutes and not a GitHub webhook. Jenkins and its WSL environment must be running to perform the polling. The official [Pipeline syntax reference](https://www.jenkins.io/doc/book/pipeline/syntax/#triggers) documents this distinction.
+**Deployment steps and scope.** The Deploy stage copies `app.py` into a `deploy/` folder inside the Jenkins workspace and runs it as a smoke test. This is a local, command-line deployment. It does not publish a service or deploy to a remote server.
 
-### Deployment and post-build actions
+## Q6 - Record commands, configurations, screenshots and observations
 
-After the test stage succeeds, the pipeline creates a workspace `deploy/` directory, copies the Python application into it and runs the copy. The observed success message is emitted by the `post { success { ... } }` block. A separate failure block exists in source but its execution is not part of the captured results.
+| Record | Location |
+|---|---|
+| Commands, in the order they were run | [commands.txt](commands.txt) (extracted from the terminal logs) |
+| Pipeline configuration | [Jenkinsfile](Jenkinsfile), [jenkins/job-config.xml](jenkins/job-config.xml) |
+| Screenshots with captions | [docs/EVIDENCE.md](docs/EVIDENCE.md) |
+| Terminal logs, Jenkins console logs, polling log | [docs/evidence/logs](docs/evidence/logs) |
+| Commit history | Table in Q2, [GitHub commits](https://github.com/Adityaporwal18/devops-lab1/commits/main) |
 
-### Observed automation evidence
+**Observations.**
 
-The repository contains the commit `c02a681`, titled **Test automated Jenkins trigger**. The supplied Build Time Trend screenshots show a second build appearing and then completing successfully. Build #1 took 11 seconds and build #2 took 5.4 seconds in that view.
+- Ubuntu's image already contained Git, so `apt install git` upgraded it instead of installing it for the first time.
+- Jenkins needs Java before it can start. OpenJDK 21 was installed first, as the Jenkins documentation requires.
+- The `pollSCM` trigger written in the Jenkinsfile only becomes active after the first build has run once.
+- With `H/2 * * * *` the delay between a push and the automatic build was under one minute in this run (push 13:23:21, build 13:24:08). In general it can be up to about two minutes.
+- Build #1 took 14.7 s because the virtual environment was created and pytest was downloaded. Build #2 reused the workspace and took 5.8 s.
+- `requirements.txt` does not pin the pytest version, so a later build may install a newer pytest.
 
-![Successful build-history detail](docs/evidence/screenshots/ss25a-build-results-detail.png)
-
-These facts are consistent with the intended polling workflow, but the screenshots do not display the build's cause. Therefore, the specific statement that build #2 was started by SCM rather than a manual click still needs a trigger-cause screenshot or polling-log export. See [required finishing evidence](docs/CHECKLIST.md#1-attach-direct-trigger-and-checkout-evidence).
-
-### Deployment scope
-
-This is a **local staging and execution demonstration inside the Jenkins workspace**. It is not a persistent deployment outside that workspace. No remote host, service supervisor, public endpoint, rollback mechanism or container deployment is claimed.
-
-The supplied task does not name a specific deployment target. Faculty acceptance of this minimal target must be confirmed if the assessed lab expects a running service or independent server. A report alone cannot resolve that interpretation.
-
-## Q6 - Record commands, configuration, screenshots and observations
-
-The repository documents commands in [commands.txt](commands.txt), job settings in [docs/JENKINS.md](docs/JENKINS.md), pipeline configuration in [Jenkinsfile](Jenkinsfile), history in [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md), and screenshots in the [evidence gallery](docs/EVIDENCE.md).
-
-The command file is a reconstructed reference from the procedure and supplied evidence. It is not presented as a verbatim export of the student's complete shell history. Installation verification is captured; full historical installation logs were not supplied.
-
-The optional [capture helper](scripts/capture-evidence.sh) records fresh environment, Git history, branch and Jenkins service output from the actual lab machine. [Console export instructions](docs/evidence/logs/README.md) explain how to attach the full Jenkins logs. These fresh logs must be generated on the student's machine; empty or invented success logs are not included.
-
-### Principal observations
-
-- A running Java runtime and systemd service were prerequisites for the Jenkins setup used here.
-- Version control separated application, testing and documentation changes into identifiable commits.
-- The source screenshots demonstrate a valid fast-forward branch merge.
-- Both numerical test cases passed locally and in the Jenkins console.
-- Jenkins ran under its own workspace, separate from the developer's checkout.
-- The local deployment stage produced the expected `2 + 3 = 5` output.
-- SCM polling is configured, while direct evidence of the trigger cause remains to be attached.
-- Test dependencies are not version-pinned; reproducibility is procedural rather than fully locked to identical packages.
-
-## Q7 - Prepare a CI/CD workflow report
-
-This report, the repository landing page and the supporting documentation describe the pipeline architecture, stages, automation configuration, observed results, limitations and supporting screenshots. The experiment's primary evidence is now organized for review through a single GitHub repository link once the documentation pack has been uploaded.
+## Q7 - CI/CD workflow report
 
 ### Architecture
 
-```text
-Windows host
-  |
-  +-- Browser: local Jenkins UI at localhost:8080
-  |
-  +-- Ubuntu / WSL2
-        |
-        +-- Developer Git checkout -- push --> GitHub main
-        |
-        +-- Jenkins service
-              |
-              +-- SCM checkout / source polling
-              +-- Build: virtual environment and dependencies
-              +-- Test: pytest (two assertions)
-              +-- Deploy: copy and execute app.py
-              +-- Post: record success or failure
+```mermaid
+flowchart LR
+    A[Developer: Ubuntu VM<br/>git commit, branch, merge] -->|git push| B[GitHub<br/>Adityaporwal18/devops-lab1]
+    B -. polled every ~2 min .-> C[Jenkins 2.580.2<br/>job devops-lab1]
+    C --> D[Checkout SCM]
+    D --> E[Build<br/>venv + pip install]
+    E --> F[Test<br/>pytest: 4 tests]
+    F --> G[Deploy<br/>copy + run app.py]
+    G --> H[Post actions<br/>success / failure message]
 ```
 
-A GitHub evaluator does not need access to `localhost:8080`; that address refers to the student's own computer. The repository must contain the screenshots and exported evidence instead.
+### Stages and timings (build #1)
 
-## 4. Overall result
+| Stage | Duration | Outcome |
+|---|---|---|
+| Checkout SCM | 1 s | Repository cloned, revision `0c6ed7c` |
+| Build | 4 s | venv created, pytest installed, `app.py` compiled |
+| Test | 0.31 s | 4 passed |
+| Deploy | 0.29 s | Application copied and executed |
+| Post Actions | 56 ms | Success message printed |
 
-Git setup, branching, merging, pushing and a successful Jenkins test-and-local-deployment run are supported by the supplied evidence. The source contains the requested Build, Test and Deploy stages, SCM polling and post-build result handling.
+### Automation results
 
-Before final assessment, add the direct trigger-cause/checkout evidence and raw console exports, then review the [submission checklist](docs/CHECKLIST.md). No claim is made that these missing screenshots have already been collected. Faculty approval of the chosen environment and deployment scope remains an assessment matter, not something inferable from a successful build.
+| Build | Started | Cause | Revision | Result | Duration |
+|---|---|---|---|---|---|
+| #1 | 25 Nov 2026 13:21:18 | Started by user Aditya Porwal | `0c6ed7c` | SUCCESS | 14.7 s |
+| #2 | 25 Nov 2026 13:24:08 | Started by an SCM change | `801426b` | SUCCESS | 5.8 s |
 
-## 5. Conclusion
+![Build history](docs/evidence/screenshots/36-jenkins-job-build-history.png)
 
-The experiment establishes a small, inspectable Git-to-Jenkins workflow for a Python application. It demonstrates meaningful source history, repeatable pipeline configuration, automatic unit-test execution and a local deployment smoke test. The documentation separates configured behavior, observed results and outstanding evidence so the repository can be evaluated without overstating what was demonstrated.
+## Conclusion
+
+The lab produced a working CI/CD workflow: code is versioned with Git using branches and merges, published to GitHub, and built, tested and deployed by a declarative Jenkins pipeline. A manual build and an automatically triggered build both succeeded, and the polling log confirms that the second build was started by the pushed commit. The deployment is a local smoke test inside the Jenkins workspace; deploying to a real server would be the next step.

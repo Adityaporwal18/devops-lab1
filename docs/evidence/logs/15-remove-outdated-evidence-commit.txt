@@ -1,0 +1,14 @@
+aditya@lima-devops:~/devops-lab1$ git rm -r -q docs/evidence docs/PROVENANCE.md docs/CHECKLIST.md docs/EVIDENCE.md docs/GIT_WORKFLOW.md docs/JENKINS.md docs/SETUP.md
+aditya@lima-devops:~/devops-lab1$ git status --short | wc -l
+40
+aditya@lima-devops:~/devops-lab1$ git commit -q -m "Remove outdated evidence and docs before re-running Lab 1"
+aditya@lima-devops:~/devops-lab1$ git show --stat --oneline HEAD | tail -n 3
+ docs/evidence/screenshots/ss28-report-commit.png   | Bin 60372 -> 0 bytes
+ .../evidence/screenshots/ss29-report-on-github.png | Bin 76620 -> 0 bytes
+ 40 files changed, 1485 deletions(-)
+aditya@lima-devops:~/devops-lab1$ git log --oneline
+f36c9b6 (HEAD -> main) Remove outdated evidence and docs before re-running Lab 1
+d356070 (origin/main) Initial commit
+aditya@lima-devops:~/devops-lab1$ ls
+Jenkinsfile  README.md  REPORT.md  app.py  commands.txt  docs  requirements.txt  scripts  test_app.py
+aditya@lima-devops:~/devops-lab1$ 

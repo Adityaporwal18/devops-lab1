@@ -2,7 +2,28 @@
 
 **Course:** DevOps and Automation Lab (ENSP461)  
 **Student:** Aditya Porwal | **GitHub:** `Adityaporwal18`  
-**Application:** a small Python calculator (`add`, `subtract`) with a Jenkins build, test and deploy pipeline.
+**Application:** a small Python calculator (`add`, `subtract`) with a Jenkins build, test and deploy pipeline.  
+**Environment:** Ubuntu 24.04.5 LTS virtual machine, Git 2.43.0, Jenkins 2.580.2, Python 3.12.3. Lab run on 25 November 2026.
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [Lab report](REPORT.md) | Q1-Q7: procedure, results, pipeline architecture and observations |
+| [Evidence gallery](docs/EVIDENCE.md) | Screenshots of every step with captions, plus links to the logs |
+| [Commands executed](commands.txt) | The commands in the order they were run |
+| [Jenkinsfile](Jenkinsfile) and [job configuration](jenkins/job-config.xml) | Pipeline definition and Jenkins job settings |
+| [Logs](docs/evidence/logs) | Terminal logs, Jenkins console logs and the Git polling log |
+| [Lab task sheet](docs/requirements) | The lab questions and general instructions |
+
+## Results
+
+| Build | Cause | Result |
+|---|---|---|
+| #1 | Started by user Aditya Porwal | SUCCESS - 4 tests passed, application deployed |
+| #2 | Started by an SCM change (pushed commit, no manual start) | SUCCESS - 4 tests passed, application deployed |
+
+![Build #2 started by an SCM change](docs/evidence/screenshots/33-jenkins-build-2-started-by-scm-change.png)
 
 ## Workflow
 
@@ -61,8 +82,11 @@ app.py                 Sample command-line application (add, subtract)
 test_app.py            Four pytest unit tests
 requirements.txt       Test dependency (pytest)
 Jenkinsfile            Declarative Build -> Test -> Deploy pipeline
+jenkins/job-config.xml Jenkins job definition (Pipeline script from SCM)
 README.md              Project overview
 REPORT.md              Lab report
-commands.txt           Commands used in the lab
-docs/                  Lab task sheet and evidence
+commands.txt           Commands executed in the lab
+docs/EVIDENCE.md       Evidence gallery
+docs/evidence/         Screenshots and logs
+docs/requirements/     Lab task sheet
 ```

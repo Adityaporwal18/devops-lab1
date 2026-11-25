@@ -1,149 +1,153 @@
-﻿LAB 1 - RECONSTRUCTED COMMAND REFERENCE
+LAB 1 - COMMANDS EXECUTED
+=========================
 
-This file reconstructs the practical workflow from the instructions, screenshots
-and repository. It is not a verbatim shell-history export or a fabricated log.
-Do not run the whole file as a script over the existing repository.
-Angle-bracket values are placeholders and must be replaced when used.
-The screenshot records user.name=Adityaporwal18; this reference uses that actual value.
+Environment: Ubuntu 24.04.5 LTS virtual machine (Lima 2.3.0, Apple M1 MacBook Pro), user aditya, host lima-devops.
+Date: 25 November 2026.
 
-1. WINDOWS POWERSHELL - OPEN THE EXISTING UBUNTU DISTRIBUTION
-wsl -l -v
-wsl -d Ubuntu
+Every command listed under a terminal evidence item was extracted from that item's terminal
+log (docs/evidence/logs/), so this file lists the commands exactly as they were run, in order.
+The text before '$' is the working directory. Steps done in a browser, in an editor or through
+the Jenkins REST API are described in words. Evidence IDs (E01...) match docs/EVIDENCE.md.
 
-2. UBUNTU - ENVIRONMENT VERIFICATION
-cd ~
-lsb_release -a
-ps -p 1 -o comm=
-systemctl is-system-running
 
-3. SYSTEM PACKAGES - HISTORICAL SETUP / FRESH ENVIRONMENT REFERENCE
-sudo apt update
-sudo apt upgrade -y
-sudo apt install git -y
-sudo apt install openjdk-21-jre-headless -y
-sudo apt install python3-venv -y
-git --version
-java -version
+Q1 - INSTALL AND CONFIGURE GIT AND JENKINS
+------------------------------------------
 
-4. JENKINS INSTALLATION REFERENCE (2026 LTS REPOSITORY KEY)
-See docs/SETUP.md and the official Jenkins Linux guide before a future install.
-sudo mkdir -p /etc/apt/keyrings
-sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
-echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt update
-sudo apt install jenkins -y
-sudo systemctl enable --now jenkins
-jenkins --version
-systemctl status jenkins --no-pager
+[E01] Ubuntu version
+  ~$ lsb_release -a
+  ~$ uname -srm
 
-Browser setup: http://localhost:8080
-The initial administrator password is read locally during setup; its value and
-credential-file contents must never be added to evidence or version control.
+[E02] Git installation and version
+  ~$ sudo apt update
+  ~$ sudo apt install git -y
+  ~$ git --version
 
-5. GLOBAL GIT IDENTITY
-git config --global user.name "Adityaporwal18"
-git config --global user.email "<YOUR_GIT_EMAIL>"
-git config --global --get user.name
-git config --global --get user.email
+[E03] Java 21 installation and version
+  ~$ sudo apt install fontconfig openjdk-21-jre python3-venv -y
+  ~$ java -version
 
-6. INITIAL REPOSITORY AND FIRST COMMIT
-cd ~
-mkdir devops-lab1
-cd devops-lab1
-git init
-git branch -M main
-git status
-nano app.py
-python3 app.py
-nano README.md
-git add app.py README.md
-git status
-git commit -m "Initial Python application setup"
-git log --oneline
+[E04] systemd is running
+  ~$ ps -p 1 -o comm=
+  ~$ systemctl is-system-running
 
-7. FEATURE BRANCH AND TESTING
-git switch -c feature-tests
-git branch
-nano test_app.py
-nano requirements.txt
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-pytest -v
-nano .gitignore
-git status
-git add .gitignore requirements.txt test_app.py
-git commit -m "Add unit tests with pytest"
-git log --oneline
-git switch main
-git merge feature-tests
-git log --oneline --graph --all
+[E05] Jenkins apt repository
+  ~$ sudo wget -q -O /etc/apt/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+  ~$ echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+  ~$ sudo apt update
 
-8. DOCUMENTATION BRANCH
-git switch -c docs-update
-nano README.md
-git add README.md
-git commit -m "Document CI/CD pipeline stages"
-git switch main
-git merge docs-update
-git log --oneline --graph --decorate --all
+[E06] Jenkins installation and version
+  ~$ sudo apt install jenkins -y
+  ~$ jenkins --version
 
-9. GITHUB AUTHENTICATION AND PUSH
-git remote add origin https://github.com/Adityaporwal18/devops-lab1.git
-git remote -v
-sudo apt install gh -y
-gh auth login
-gh auth status
-git push -u origin main
-Browser login is interactive. No account password or access token belongs here.
+[E07] Jenkins service status
+  ~$ sudo systemctl enable --now jenkins
+  ~$ systemctl status jenkins --no-pager --lines=0
+  ~$ systemctl is-enabled jenkins && systemctl is-active jenkins
 
-10. PIPELINE COMMIT
-nano Jenkinsfile
-git add Jenkinsfile
-git commit -m "Add Jenkins CI/CD pipeline"
-git push
-Job setup is documented in docs/JENKINS.md.
+[E08] Unlock Jenkins page
+  Browser: opened http://localhost:8080 and entered the initial admin password
+           (read from /var/lib/jenkins/secrets/initialAdminPassword; value not recorded)
 
-11. COMMANDS EXECUTED BY THE JENKINSFILE
-Build:
-python3 -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
-python3 -m compileall app.py
+[E09] Customize Jenkins
+  Browser: chose "Install suggested plugins"
 
-Test:
-. venv/bin/activate
-pytest -v
+[E11] Create first admin user
+  Browser: created the first admin user (username aditya, full name Aditya Porwal),
+           kept the Jenkins URL http://localhost:8080/ and finished the wizard
 
-Deploy (local workspace staging and smoke test):
-mkdir -p deploy
-cp app.py deploy/app.py
-python3 deploy/app.py
+[E13] Global Git configuration
+  ~$ git config --global user.name "Adityaporwal18"
+  ~$ git config --global user.email "adityaporwal501@gmail.com"
+  ~$ git config --global init.defaultBranch main
+  ~$ git config --global --list
 
-12. HISTORICAL TRIGGER TEST CHANGE
-cd ~/devops-lab1
-# README.md was changed for the trigger demonstration.
-git add README.md
-git commit -m "Test automated Jenkins trigger"
-git push
-Jenkinsfile configures pollSCM('H/2 * * * *').
-Do not click Build Now while collecting evidence of an automatic trigger.
-Verify the actual build cause rather than inferring it from a green status.
+Q2 - VERSION CONTROL WITH GIT AND GITHUB
+----------------------------------------
 
-13. ORIGINAL DOCUMENTATION COMMITS
-nano commands.txt
-git add commands.txt
-git commit -m "Add Lab 1 command documentation"
-git push
-nano REPORT.md
-git add REPORT.md
-git commit -m "Add Lab 1 CI/CD workflow report"
-git push
+[E14] Initialise repository, add remote, pull
+  ~$ cd ~/devops-lab1
+  ~/devops-lab1$ git init
+  ~/devops-lab1$ git remote add origin https://github.com/Adityaporwal18/devops-lab1.git
+  ~/devops-lab1$ git remote -v
+  ~/devops-lab1$ git pull origin main
+  ~/devops-lab1$ git log --oneline
+  ~/devops-lab1$ git status
 
-14. NEW EVIDENCE CAPTURE - TO RUN AFTER ADDING THE DOCUMENTATION PACK
-bash scripts/capture-evidence.sh
-Export the full console logs through the authenticated Jenkins browser.
-See docs/evidence/logs/README.md.
-Stage only the intended documentation/evidence files, review, commit and push.
+[E15] Remove outdated evidence (first commit of this run)
+  ~/devops-lab1$ git rm -r -q docs/evidence docs/PROVENANCE.md docs/CHECKLIST.md docs/EVIDENCE.md docs/GIT_WORKFLOW.md docs/JENKINS.md docs/SETUP.md
+  ~/devops-lab1$ git status --short | wc -l
+  ~/devops-lab1$ git commit -q -m "Remove outdated evidence and docs before re-running Lab 1"
+  ~/devops-lab1$ git show --stat --oneline HEAD | tail -n 3
+  ~/devops-lab1$ git log --oneline
+  ~/devops-lab1$ ls
+
+[E16] Feature branch and staged work
+  ~/devops-lab1$ git switch -c feature-subtract
+  ~/devops-lab1$ git branch
+  ~/devops-lab1$ git status
+  ~/devops-lab1$ git diff --stat
+
+[E16] Feature branch and staged work
+  Editor: added subtract() to app.py and two tests to test_app.py (between `git branch` and `git status`)
+
+[E17] Local tests pass
+  ~/devops-lab1$ python3 -m venv venv
+  ~/devops-lab1$ source venv/bin/activate
+  ~/devops-lab1$ pip install -r requirements.txt
+  ~/devops-lab1$ pytest -v
+  ~/devops-lab1$ python3 app.py
+
+[E18] Commit on the feature branch
+  ~/devops-lab1$ git add app.py test_app.py
+  ~/devops-lab1$ git commit -m "Add subtract function with unit tests"
+  ~/devops-lab1$ git log --oneline --graph --decorate --all
+
+[E19] Merge the feature branch
+  ~/devops-lab1$ git switch main
+  ~/devops-lab1$ git merge --no-ff feature-subtract -m "Merge branch 'feature-subtract'"
+  ~/devops-lab1$ git log --oneline --graph --decorate --all
+
+[E20] Documentation branch, merge and history
+  ~/devops-lab1$ deactivate
+  ~/devops-lab1$ git switch -c docs-update
+  ~/devops-lab1$ git status --short
+  ~/devops-lab1$ git add README.md
+  ~/devops-lab1$ git commit -m "Document pipeline stages and local usage in README"
+  ~/devops-lab1$ git switch main
+  ~/devops-lab1$ git merge --no-ff docs-update -m "Merge branch 'docs-update'"
+  ~/devops-lab1$ git log --oneline --graph --decorate --all
+  ~/devops-lab1$ git branch
+
+[E20] Documentation branch, merge and history
+  Editor: rewrote README.md (between `git switch -c docs-update` and `git status --short`)
+
+[E21] Install GitHub CLI
+  ~/devops-lab1$ sudo apt install gh -y
+  ~/devops-lab1$ gh --version
+
+[E22] GitHub authentication
+  ~/devops-lab1$ gh auth login --hostname github.com --git-protocol https --web
+  ~/devops-lab1$ gh auth status
+
+[E23] Push to GitHub
+  ~/devops-lab1$ git push -u origin main
+  ~/devops-lab1$ git status -sb
+  ~/devops-lab1$ git log --oneline -n 6
+
+Q3-Q5 - JENKINS PIPELINE, STAGES AND AUTOMATED TRIGGER
+------------------------------------------------------
+
+[E27] Pipeline job configuration
+  Jenkins REST API (signed in as the Jenkins user aditya; credentials not recorded):
+    curl -X POST 'http://localhost:8080/createItem?name=devops-lab1' \
+         -H 'Content-Type: application/xml' --data-binary @jenkins/job-config.xml
+    curl -X POST http://localhost:8080/job/devops-lab1/build      # build #1, same as "Build Now"
+
+[E32] Push a change to test the trigger
+  ~/devops-lab1$ git status --short
+  ~/devops-lab1$ git add jenkins/job-config.xml
+  ~/devops-lab1$ git commit -m "Add Jenkins pipeline job configuration"
+  ~/devops-lab1$ git push
+  ~/devops-lab1$ date
 
 Repository: https://github.com/Adityaporwal18/devops-lab1

@@ -1,0 +1,19 @@
+aditya@lima-devops:~/devops-lab1$ git switch -c feature-subtract
+Switched to a new branch 'feature-subtract'
+aditya@lima-devops:~/devops-lab1$ git branch
+* feature-subtract
+  main
+aditya@lima-devops:~/devops-lab1$ git status
+On branch feature-subtract
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   app.py
+        modified:   test_app.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+aditya@lima-devops:~/devops-lab1$ git diff --stat
+ app.py      |  5 +++++
+ test_app.py | 10 +++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+aditya@lima-devops:~/devops-lab1$ 

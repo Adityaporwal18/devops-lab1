@@ -1,0 +1,129 @@
+Started by an SCM change
+Obtained Jenkinsfile from git https://github.com/Adityaporwal18/devops-lab1.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-lab1
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab1/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Adityaporwal18/devops-lab1.git # timeout=10
+Fetching upstream changes from https://github.com/Adityaporwal18/devops-lab1.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/Adityaporwal18/devops-lab1.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 801426bae9d8ffd0c6b676518cd3e46165f6c074 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 801426bae9d8ffd0c6b676518cd3e46165f6c074 # timeout=10
+Commit message: "Add Jenkins pipeline job configuration"
+ > git rev-list --no-walk 0c6ed7ca4b44dc8fd7f3a584f87cbee041d7cf5e # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ python3 -m venv venv
++ . venv/bin/activate
++ deactivate nondestructive
++ [ -n  ]
++ [ -n  ]
++ hash -r
++ [ -n  ]
++ unset VIRTUAL_ENV
++ unset VIRTUAL_ENV_PROMPT
++ [ ! nondestructive = nondestructive ]
++ [  = cygwin ]
++ [  = msys ]
++ export VIRTUAL_ENV=/var/lib/jenkins/workspace/devops-lab1/venv
++ _OLD_VIRTUAL_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin
++ PATH=/var/lib/jenkins/workspace/devops-lab1/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin
++ export PATH
++ [ -n  ]
++ [ -z  ]
++ _OLD_VIRTUAL_PS1=$ 
++ PS1=(venv) $ 
++ export PS1
++ VIRTUAL_ENV_PROMPT=(venv) 
++ export VIRTUAL_ENV_PROMPT
++ hash -r
++ pip install -r requirements.txt
+Requirement already satisfied: pytest in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 1)) (9.2.0)
+Requirement already satisfied: iniconfig>=2 in ./venv/lib/python3.12/site-packages (from pytest->-r requirements.txt (line 1)) (2.3.1)
+Requirement already satisfied: packaging>=24 in ./venv/lib/python3.12/site-packages (from pytest->-r requirements.txt (line 1)) (26.4)
+Requirement already satisfied: pluggy<2,>=1.6 in ./venv/lib/python3.12/site-packages (from pytest->-r requirements.txt (line 1)) (1.7.0)
+Requirement already satisfied: pygments>=2.15 in ./venv/lib/python3.12/site-packages (from pytest->-r requirements.txt (line 1)) (2.21.0)
++ python3 -m compileall app.py
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
++ . venv/bin/activate
++ deactivate nondestructive
++ [ -n  ]
++ [ -n  ]
++ hash -r
++ [ -n  ]
++ unset VIRTUAL_ENV
++ unset VIRTUAL_ENV_PROMPT
++ [ ! nondestructive = nondestructive ]
++ [  = cygwin ]
++ [  = msys ]
++ export VIRTUAL_ENV=/var/lib/jenkins/workspace/devops-lab1/venv
++ _OLD_VIRTUAL_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin
++ PATH=/var/lib/jenkins/workspace/devops-lab1/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin
++ export PATH
++ [ -n  ]
++ [ -z  ]
++ _OLD_VIRTUAL_PS1=$ 
++ PS1=(venv) $ 
++ export PS1
++ VIRTUAL_ENV_PROMPT=(venv) 
++ export VIRTUAL_ENV_PROMPT
++ hash -r
++ pytest -v
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.2.0, pluggy-1.7.0 -- /var/lib/jenkins/workspace/devops-lab1/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /var/lib/jenkins/workspace/devops-lab1
+collecting ... collected 4 items
+
+test_app.py::test_add PASSED                                             [ 25%]
+test_app.py::test_add_negative_numbers PASSED                            [ 50%]
+test_app.py::test_subtract PASSED                                        [ 75%]
+test_app.py::test_subtract_negative_result PASSED                        [100%]
+
+============================== 4 passed in 0.01s ===============================
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] sh
++ mkdir -p deploy
++ cp app.py deploy/app.py
++ python3 deploy/app.py
+DevOps Lab 1 Application
+2 + 3 = 5
+5 - 3 = 2
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+CI/CD Pipeline completed successfully!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

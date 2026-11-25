@@ -1,0 +1,21 @@
+aditya@lima-devops:~/devops-lab1$ git push -u origin main
+Enumerating objects: 17, done.
+Counting objects: 100% (17/17), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (11/11), done.
+Writing objects: 100% (12/12), 2.36 KiB | 1.18 MiB/s, done.
+Total 12 (delta 6), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (6/6), completed with 2 local objects.
+To https://github.com/Adityaporwal18/devops-lab1.git
+   d356070..0c6ed7c  main -> main
+branch 'main' set up to track 'origin/main'.
+aditya@lima-devops:~/devops-lab1$ git status -sb
+## main...origin/main
+aditya@lima-devops:~/devops-lab1$ git log --oneline -n 6
+0c6ed7c (HEAD -> main, origin/main) Merge branch 'docs-update'
+2de7442 (docs-update) Document pipeline stages and local usage in README
+3a02dfc Merge branch 'feature-subtract'
+2c565c3 (feature-subtract) Add subtract function with unit tests
+f36c9b6 Remove outdated evidence and docs before re-running Lab 1
+d356070 Initial commit
+aditya@lima-devops:~/devops-lab1$ 

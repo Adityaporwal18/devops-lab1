@@ -1,0 +1,9 @@
+aditya@lima-devops:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 24.04.5 LTS
+Release:        24.04
+Codename:       noble
+aditya@lima-devops:~$ uname -srm
+Linux 6.8.0-147-generic aarch64
+aditya@lima-devops:~$ 

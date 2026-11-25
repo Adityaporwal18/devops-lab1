@@ -1,0 +1,15 @@
+(venv) aditya@lima-devops:~/devops-lab1$ git switch main
+Switched to branch 'main'
+(venv) aditya@lima-devops:~/devops-lab1$ git merge --no-ff feature-subtract -m "Merge branch 'feature-subtract'"
+Merge made by the 'ort' strategy.
+ app.py      |  5 +++++
+ test_app.py | 10 +++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+(venv) aditya@lima-devops:~/devops-lab1$ git log --oneline --graph --decorate --all
+*   3a02dfc (HEAD -> main) Merge branch 'feature-subtract'
+|\  
+| * 2c565c3 (feature-subtract) Add subtract function with unit tests
+|/  
+* f36c9b6 Remove outdated evidence and docs before re-running Lab 1
+* d356070 (origin/main) Initial commit
+(venv) aditya@lima-devops:~/devops-lab1$ 

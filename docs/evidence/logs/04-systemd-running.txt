@@ -1,0 +1,5 @@
+aditya@lima-devops:~$ ps -p 1 -o comm=
+systemd
+aditya@lima-devops:~$ systemctl is-system-running
+running
+aditya@lima-devops:~$ 

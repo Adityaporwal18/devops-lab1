@@ -1,0 +1,31 @@
+(venv) aditya@lima-devops:~/devops-lab1$ deactivate
+aditya@lima-devops:~/devops-lab1$ git switch -c docs-update
+Switched to a new branch 'docs-update'
+aditya@lima-devops:~/devops-lab1$ git status --short
+ M README.md
+aditya@lima-devops:~/devops-lab1$ git add README.md
+aditya@lima-devops:~/devops-lab1$ git commit -m "Document pipeline stages and local usage in README"
+[docs-update 2de7442] Document pipeline stages and local usage in README
+ 1 file changed, 28 insertions(+), 51 deletions(-)
+aditya@lima-devops:~/devops-lab1$ git switch main
+Switched to branch 'main'
+aditya@lima-devops:~/devops-lab1$ git merge --no-ff docs-update -m "Merge branch 'docs-update'"
+Merge made by the 'ort' strategy.
+ README.md | 79 ++++++++++++++++++++++++++++---------------------------------------------------
+ 1 file changed, 28 insertions(+), 51 deletions(-)
+aditya@lima-devops:~/devops-lab1$ git log --oneline --graph --decorate --all
+*   0c6ed7c (HEAD -> main) Merge branch 'docs-update'
+|\  
+| * 2de7442 (docs-update) Document pipeline stages and local usage in README
+|/  
+*   3a02dfc Merge branch 'feature-subtract'
+|\  
+| * 2c565c3 (feature-subtract) Add subtract function with unit tests
+|/  
+* f36c9b6 Remove outdated evidence and docs before re-running Lab 1
+* d356070 (origin/main) Initial commit
+aditya@lima-devops:~/devops-lab1$ git branch
+  docs-update
+  feature-subtract
+* main
+aditya@lima-devops:~/devops-lab1$ 

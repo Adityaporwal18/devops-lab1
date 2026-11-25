@@ -1,0 +1,20 @@
+aditya@lima-devops:~/devops-lab1$ git status --short
+?? jenkins/
+aditya@lima-devops:~/devops-lab1$ git add jenkins/job-config.xml
+aditya@lima-devops:~/devops-lab1$ git commit -m "Add Jenkins pipeline job configuration"
+[main 801426b] Add Jenkins pipeline job configuration
+ 1 file changed, 28 insertions(+)
+ create mode 100644 jenkins/job-config.xml
+aditya@lima-devops:~/devops-lab1$ git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 853 bytes | 853.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Adityaporwal18/devops-lab1.git
+   0c6ed7c..801426b  main -> main
+aditya@lima-devops:~/devops-lab1$ date
+Wed Nov 25 13:23:21 IST 2026
+aditya@lima-devops:~/devops-lab1$ 

@@ -1,0 +1,9 @@
+(venv) aditya@lima-devops:~/devops-lab1$ git add app.py test_app.py
+(venv) aditya@lima-devops:~/devops-lab1$ git commit -m "Add subtract function with unit tests"
+[feature-subtract 2c565c3] Add subtract function with unit tests
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+(venv) aditya@lima-devops:~/devops-lab1$ git log --oneline --graph --decorate --all
+* 2c565c3 (HEAD -> feature-subtract) Add subtract function with unit tests
+* f36c9b6 (main) Remove outdated evidence and docs before re-running Lab 1
+* d356070 (origin/main) Initial commit
+(venv) aditya@lima-devops:~/devops-lab1$ 

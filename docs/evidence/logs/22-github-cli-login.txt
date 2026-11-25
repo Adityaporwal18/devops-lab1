@@ -1,0 +1,21 @@
+aditya@lima-devops:~/devops-lab1$ gh auth login --hostname github.com --git-protocol https --web
+? Authenticate Git with your GitHub credentials? Yes
+
+! First copy your one-time code: 1951-E606
+Press Enter to open github.com in your browser... 
+! Failed opening a web browser at https://github.com/login/device
+  exec: "xdg-open,x-www-browser,www-browser,wslview": executable file not found in $PATH
+  Please try entering the URL in your browser manually
+✓ Authentication complete.
+- gh config set -h github.com git_protocol https
+✓ Configured git protocol
+! Authentication credentials saved in plain text
+✓ Logged in as Adityaporwal18
+aditya@lima-devops:~/devops-lab1$ gh auth status
+github.com
+  ✓ Logged in to github.com account Adityaporwal18 (/home/aditya/.config/gh/hosts.yml)
+  - Active account: true
+  - Git operations protocol: https
+  - Token: gho_************************************
+  - Token scopes: 'gist', 'read:org', 'repo', 'workflow'
+aditya@lima-devops:~/devops-lab1$ 
