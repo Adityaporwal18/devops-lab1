@@ -11,6 +11,7 @@ All evidence on this page was captured on **25 November 2026** while running Lab
 | [Q1 - Install and configure Git and Jenkins](#q1---install-and-configure-git-and-jenkins) | E01-E13 |
 | [Q2 - Version control with Git and GitHub](#q2---version-control-with-git-and-github) | E14-E26 |
 | [Q3-Q5 - Jenkins pipeline, stages and automated trigger](#q3-q5---jenkins-pipeline-stages-and-automated-trigger) | E27-E36 |
+| [Q6-Q7 - Documentation in the repository](#q6-q7---documentation-in-the-repository) | E37-E39 |
 
 ## Q1 - Install and configure Git and Jenkins
 
@@ -283,3 +284,25 @@ Source: [Polling log text](evidence/logs/jenkins-scm-polling-log.txt)
 Job page of `devops-lab1`: builds #1 (13:21) and #2 (13:24) are both successful.
 
 ![E36 Build history](evidence/screenshots/36-jenkins-job-build-history.png)
+
+## Q6-Q7 - Documentation in the repository
+
+### E37 - Commit and push the documentation
+
+The evidence gallery, command record, report and screenshots are committed and pushed to GitHub.
+
+![E37 Commit and push the documentation](evidence/screenshots/37-commit-and-push-documentation.png)
+
+Source: [Terminal log](evidence/logs/37-commit-and-push-documentation.txt)
+
+### E38 - Build history after the documentation push
+
+The documentation push was also picked up by SCM polling: build #3 started automatically and succeeded.
+
+![E38 Build history after the documentation push](evidence/screenshots/38-jenkins-build-history-after-docs-push.png)
+
+### E39 - Final repository on GitHub
+
+The repository on GitHub with the report, command record, Jenkins job configuration and the `docs` folder.
+
+![E39 Final repository on GitHub](evidence/screenshots/39-github-final-repository.png)

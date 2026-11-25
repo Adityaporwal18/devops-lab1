@@ -150,4 +150,16 @@ Q3-Q5 - JENKINS PIPELINE, STAGES AND AUTOMATED TRIGGER
   ~/devops-lab1$ git push
   ~/devops-lab1$ date
 
+Q6-Q7 - DOCUMENTATION IN THE REPOSITORY
+---------------------------------------
+
+[E37] Commit and push the documentation
+  ~/devops-lab1$ git rm -q -r scripts
+  ~/devops-lab1$ git add -A
+  ~/devops-lab1$ git status --short | wc -l
+  ~/devops-lab1$ git commit -q -m "Add Lab 1 evidence, command record and CI/CD workflow report"
+  ~/devops-lab1$ git show --stat --oneline HEAD | tail -n 4
+  ~/devops-lab1$ git push
+  ~/devops-lab1$ git log --oneline -n 4
+
 Repository: https://github.com/Adityaporwal18/devops-lab1

@@ -22,6 +22,7 @@
 |---|---|---|
 | #1 | Started by user Aditya Porwal | SUCCESS - 4 tests passed, application deployed |
 | #2 | Started by an SCM change (pushed commit, no manual start) | SUCCESS - 4 tests passed, application deployed |
+| #3 | Started by an SCM change (documentation push) | SUCCESS - 4 tests passed, application deployed |
 
 ![Build #2 started by an SCM change](docs/evidence/screenshots/33-jenkins-build-2-started-by-scm-change.png)
 

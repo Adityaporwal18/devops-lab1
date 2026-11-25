@@ -194,8 +194,11 @@ flowchart LR
 |---|---|---|---|---|---|
 | #1 | 25 Nov 2026 13:21:18 | Started by user Aditya Porwal | `0c6ed7c` | SUCCESS | 14.7 s |
 | #2 | 25 Nov 2026 13:24:08 | Started by an SCM change | `801426b` | SUCCESS | 5.8 s |
+| #3 | 25 Nov 2026 13:32:09 | Started by an SCM change (documentation push) | `4474f93` | SUCCESS | 8.0 s |
 
-![Build history](docs/evidence/screenshots/36-jenkins-job-build-history.png)
+Build #3 was started by polling after the documentation commit was pushed ([E37](docs/evidence/screenshots/37-commit-and-push-documentation.png), [E38](docs/evidence/screenshots/38-jenkins-build-history-after-docs-push.png)). Later pushes to `main` are built automatically in the same way.
+
+![Build history](docs/evidence/screenshots/38-jenkins-build-history-after-docs-push.png)
 
 ## Conclusion
 

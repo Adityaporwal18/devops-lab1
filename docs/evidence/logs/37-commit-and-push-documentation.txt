@@ -1,0 +1,26 @@
+aditya@lima-devops:~/devops-lab1$ git rm -q -r scripts
+aditya@lima-devops:~/devops-lab1$ git add -A
+aditya@lima-devops:~/devops-lab1$ git status --short | wc -l
+64
+aditya@lima-devops:~/devops-lab1$ git commit -q -m "Add Lab 1 evidence, command record and CI/CD workflow report"
+aditya@lima-devops:~/devops-lab1$ git show --stat --oneline HEAD | tail -n 4
+ .../screenshots/35-jenkins-scm-polling-log.png     | Bin 0 -> 238723 bytes
+ .../screenshots/36-jenkins-job-build-history.png   | Bin 0 -> 160667 bytes
+ scripts/capture-evidence.sh                        |  70 --
+ 64 files changed, 1993 insertions(+), 416 deletions(-)
+aditya@lima-devops:~/devops-lab1$ git push
+Enumerating objects: 75, done.
+Counting objects: 100% (75/75), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (69/69), done.
+Writing objects: 100% (69/69), 7.47 MiB | 8.70 MiB/s, done.
+Total 69 (delta 6), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (6/6), completed with 1 local object.
+To https://github.com/Adityaporwal18/devops-lab1.git
+   801426b..4474f93  main -> main
+aditya@lima-devops:~/devops-lab1$ git log --oneline -n 4
+4474f93 (HEAD -> main, origin/main) Add Lab 1 evidence, command record and CI/CD workflow report
+801426b Add Jenkins pipeline job configuration
+0c6ed7c Merge branch 'docs-update'
+2de7442 (docs-update) Document pipeline stages and local usage in README
+aditya@lima-devops:~/devops-lab1$ 
